@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Story {{ name }}{% endblock %}
+
+{% block body %}
+    <h2 class="story-name">{{ name }}</h2>
+    <div class="story-book-container">
+        <div class="story-photo"></div>
+        <div class="story-details">
+            <dl class="story-details-list">
+                <dt>Genre:</dt>
+                <dd>Journey</dd>
+                <dt>Likes:</dt>
+                <dd>289</dd>
+                <dt>Title:</dt>
+                <dd>This story about the last year of my life.</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="stories-container">
+        <h2 class="stories-header">Stories</h2>
+        <div><i class="fa fa-plus plus-btn"></i></div>
+    </div>
+    <section id="cd-timeline">
+        {% for story in stories %}
+            <div class="story-wrapper">
+                <h2 class="story-title"><a href="#">3 months story</a></h2>
+                <p>{{ story }}</p>
+                <span class="cd-date">Dec. 10, 2015</span>
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}
