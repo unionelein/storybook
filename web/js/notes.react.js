@@ -1,20 +1,20 @@
-var NoteSection = React.createClass({
+var StorySection = React.createClass({
     getInitialState: function() {
         return {
-            notes: []
+            stories: []
         }
     },
 
     componentDidMount: function() {
-        this.loadNotesFromServer();
-        setInterval(this.loadNotesFromServer, 2000);
+        this.loadStoriesFromServer();
+        setInterval(this.loadStoriesFromServer, 2000);
     },
 
-    loadNotesFromServer: function() {
+    loadStoriesFromServer: function() {
         $.ajax({
-            url: '/genus/octopus/notes',
+            url: this.props.url,
             success: function (data) {
-                this.setState({notes: data.notes});
+                this.setState({stories: data.stories});
             }.bind(this)
         });
     },
@@ -22,47 +22,44 @@ var NoteSection = React.createClass({
     render: function() {
         return (
             <div>
-                <div className="notes-container">
-                    <h2 className="notes-header">Notes</h2>
+                <div className="stories-container">
+                    <h2 className="stories-header">Stories</h2>
                     <div><i className="fa fa-plus plus-btn"></i></div>
                 </div>
-                <NoteList notes={this.state.notes} />
+                <StoryList stories={this.state.stories} />
             </div>
         );
     }
 });
 
-var NoteList = React.createClass({
+var StoryList = React.createClass({
     render: function() {
-        var noteNodes = this.props.notes.map(function(note) {
+        var storyNodes = this.props.stories.map(function(story) {
             return (
-                <NoteBox username={note.username} avatarUri={note.avatarUri} date={note.date} key={note.id}>{note.note}</NoteBox>
+                <StoryBox username={story.storyName} avatarUri={story.avatarUri} date={story.date} key={story.id}>{story.story}</StoryBox>
             );
         });
 
         return (
             <section id="cd-timeline">
-                {noteNodes}
+                {storyNodes}
             </section>
         );
     }
 });
 
-var NoteBox = React.createClass({
+var StoryBox = React.createClass({
     render: function() {
         return (
-            <div className="cd-timeline-block">
-                <div className="cd-timeline-img">
-                    <img src={this.props.avatarUri} className="img-circle" alt="Leanna!" />
-                </div>
-                <div className="cd-timeline-content">
-                    <h2><a href="#">{this.props.username}</a></h2>
-                    <p>{this.props.children}</p>
-                    <span className="cd-date">{this.props.date}</span>
-                </div>
+            <div className="story-wrapper">
+                <img src={this.props.avatarUri} className="story-img" alt="Cool Story!" />
+                <h2 className="story-name"><a href="#">{this.props.storyName}</a></h2>
+                <p>{this.props.children}</p>
+                <span className="cd-date">{this.props.date}</span>
+                <div className="clear"></div>
             </div>
         );
     }
 });
 
-window.NoteSection = NoteSection;
+window.StorySection = StorySection;

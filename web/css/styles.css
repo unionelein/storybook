@@ -32,6 +32,18 @@ Flexbox Layout
     justify-content: space-between;
     border-top: 1px solid #ECF0F1;
 }
+.clear {
+    clear: both;
+}
+
+.story-img {
+    float: left;
+    margin-right: 30px;
+    border-radius: 10px;
+    max-width: 400px;
+    max-height: 200px;
+}
+
 
 footer {
     justify-content: center;
@@ -423,6 +435,7 @@ Main components
 
 .story-name {
     padding-left: 40px;
+    font-weight: bold;
 }
 
 .cd-timeline-content {

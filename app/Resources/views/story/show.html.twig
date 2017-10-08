@@ -13,21 +13,28 @@
                 <dt>Likes:</dt>
                 <dd>289</dd>
                 <dt>Title:</dt>
-                <dd>This story about the last year of my life.</dd>
+                <dd>{{ title|raw }}</dd>
             </dl>
         </div>
     </div>
-    <div class="stories-container">
-        <h2 class="stories-header">Stories</h2>
-        <div><i class="fa fa-plus plus-btn"></i></div>
-    </div>
-    <section id="cd-timeline">
-        {% for story in stories %}
-            <div class="story-wrapper">
-                <h2 class="story-title"><a href="#">3 months story</a></h2>
-                <p>{{ story }}</p>
-                <span class="cd-date">Dec. 10, 2015</span>
-            </div>
-        {% endfor %}
-    </section>
+
+    <div id="js-stories-wrapper"></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.3/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.23/browser.min.js"></script>
+
+    <script type="text/babel" src="{{ asset('js/notes.react.js') }}"></script>
+
+    <script type="text/babel">
+        var storiesUrl = '{{ path('story_show_stories', {'storyName': name}) }}';
+
+        ReactDOM.render(
+          <StorySection url={storiesUrl}/>,
+          document.getElementById('js-stories-wrapper')
+        );
+    </script>
 {% endblock %}
