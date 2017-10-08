@@ -1,0 +1,7 @@
+AppBundle\Entity\Story:
+    story_{1..10}:
+        title: <name()>
+        genre: <text(20)>
+        likes: <numberBetween(0, 1000)>
+        story: <sentence()>
+        isPublic: <boolean(30)>

@@ -1,19 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Story {{ name }}{% endblock %}
+{% block title %}Story {{ story.title }}{% endblock %}
 
 {% block body %}
-    <h2 class="story-name">{{ name }}</h2>
+    <h2 class="story-name">{{ story.title }}</h2>
     <div class="story-book-container">
         <div class="story-photo"></div>
         <div class="story-details">
             <dl class="story-details-list">
                 <dt>Genre:</dt>
-                <dd>Journey</dd>
+                <dd>{{ story.genre }}</dd>
                 <dt>Likes:</dt>
-                <dd>289</dd>
+                <dd>{{ story.likes }}</dd>
                 <dt>Title:</dt>
-                <dd>{{ title|raw }}</dd>
+                <dd>{{ story.story|raw }}</dd>
             </dl>
         </div>
     </div>
@@ -30,7 +30,7 @@
     <script type="text/babel" src="{{ asset('js/notes.react.js') }}"></script>
 
     <script type="text/babel">
-        var storiesUrl = '{{ path('story_show_stories', {'storyName': name}) }}';
+        var storiesUrl = '{{ path('story_show_stories', {'storyName': story.title}) }}';
 
         ReactDOM.render(
           <StorySection url={storiesUrl}/>,

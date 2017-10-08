@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<table class="table">
+    <thead>
+    <tr>
+        <th>Story</th>
+        <th># of likes</th>
+        <th>Last updated</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for story in stories %}
+        <tr>
+            <td>
+                <a href="{{ path('show_story', {'storyName': story.title}) }}">{{ story.title }}</a>
+            </td>
+            <td>{{ story.likes }}</td>
+            <td>{{ story.updatedAt|date('Y-m-d') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

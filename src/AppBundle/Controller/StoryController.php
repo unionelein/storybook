@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Story;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,11 +12,52 @@ use Symfony\Component\HttpFoundation\Response;
 class StoryController extends Controller
 {
     /**
-     * @Route("/story/{storyName}")
+     * @Route("/story/new")
+     *
+     * @return Response
+     */
+    public function newAction()
+    {
+        $story = new Story();
+        $story->setStory("I am kind ". rand(1,100));
+        $story->setGenre("NICEVIY");
+        $story->setTitle("About me in last month");
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($story);
+        $em->flush();
+
+        return new Response("<html><body>Story was created!</body></html>");
+    }
+
+    /**
+     * @Route("/story")
+     */
+    public function listAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $stories = $em->getRepository("AppBundle:Story")
+            ->findAllPublicStory();
+
+        return $this->render("story/list.html.twig", [
+            "stories" => $stories,
+        ]);
+    }
+
+    /**
+     * @Route("/story/{storyName}", name="show_story")
      */
     public function showAction($storyName)
     {
-        $title = "This story about the last year of my *life*.";
+        $em = $this->getDoctrine()->getManager();
+        $story = $em->getRepository("AppBundle:Story")
+            ->findOneBy(["title" => $storyName]);
+
+        if (!$story) {
+            throw $this->createNotFoundException("No story found");
+        }
+        /*
         $cache = $this->get("doctrine_cache.providers.my_markdown_cache");
         $key = md5($title);
 
@@ -31,11 +73,10 @@ class StoryController extends Controller
 
         $title = $this->get("markdown.parser")
             ->transform($title);
-
+        */
 
         return $this->render("story/show.html.twig", [
-            "name" => $storyName,
-            "title" => $title,
+            "story" => $story,
         ]);
     }
 
