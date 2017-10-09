@@ -3,6 +3,8 @@ namespace AppBundle\Service;
 
 use Doctrine\Common\Cache\Cache;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
+use Knp\Bundle\MarkdownBundle\Parser\Preset\Max;
+
 
 class MarkdownTransformer
 {
@@ -10,7 +12,7 @@ class MarkdownTransformer
 
     private $cache;
 
-    public function __construct(MarkdownParserInterface $markdownParser, Cache $cache)
+    public function __construct(Max $markdownParser, Cache $cache)
     {
         $this->markdownParser = $markdownParser;
         $this->cache = $cache;

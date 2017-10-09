@@ -2,15 +2,15 @@
 
 namespace AppBundle\Twig;
 
-use AppBundle\Service\MarkdownParser;
+use AppBundle\Service\MarkdownTransformer;
 
 class MarkdownExtension extends \Twig_Extension
 {
-    private $markdownParser;
+    private $markdownTransformer;
 
-    public function __construct(MarkdownParser $markdownParser)
+    public function __construct(MarkdownTransformer $markdownTransformer)
     {
-        $this->markdownParser = $markdownParser;
+        $this->markdownTransformer = $markdownTransformer;
     }
 
     public function getFilters()
@@ -24,7 +24,7 @@ class MarkdownExtension extends \Twig_Extension
 
     public function parseMarkdown($str)
     {
-        return $this->markdownParser->parse($str);
+        return $this->markdownTransformer->parse($str);
     }
 
     public function getName()
