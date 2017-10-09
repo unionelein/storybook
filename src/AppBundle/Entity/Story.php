@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,7 +41,27 @@ class Story
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPublic;
+    private $isPublic = true;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\StoryPart", mappedBy="story")
+     * @ORM\OrderBy({"createdAt"="DESC"})
+     */
+    private $storyParts;
+
+    /**
+     * @return ArrayCollection|StoryPart[]
+     */
+    public function getStoryParts()
+    {
+        return $this->storyParts;
+    }
+
+
+    public function __construct()
+    {
+        $this->storyParts = new ArrayCollection();
+    }
 
     /**
      * @return mixed

@@ -13,7 +13,9 @@
                 <dt>Likes:</dt>
                 <dd>{{ story.likes }}</dd>
                 <dt>Title:</dt>
-                <dd>{{ story.story|raw }}</dd>
+                <dd>{{ story.story|markdownify }}</dd>
+                <dt>Count of last 3 months:</dt>
+                <dd>{{ countLast3Months }}</dd>
             </dl>
         </div>
     </div>
@@ -30,7 +32,7 @@
     <script type="text/babel" src="{{ asset('js/notes.react.js') }}"></script>
 
     <script type="text/babel">
-        var storiesUrl = '{{ path('story_show_stories', {'storyName': story.title}) }}';
+        var storiesUrl = '{{ path('story_show_stories', {'title': story.title}) }}';
 
         ReactDOM.render(
           <StorySection url={storiesUrl}/>,

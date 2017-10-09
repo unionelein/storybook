@@ -16,15 +16,15 @@ class StoryRepository extends EntityRepository
     /**
      * @return Story[]
      */
-    public function findAllPublicStory()
+    public function findAllPublicStoryByLastStory()
     {
         return $this->createQueryBuilder("story")
             ->andWhere("story.isPublic = :isPublic")
             ->setParameter("isPublic", true)
-            ->orderBy("story.likes", "DESC")
+            ->leftJoin("story.storyParts", "story_parts")
+            ->orderBy("story_parts.createdAt", "DESC")
             ->getQuery()
             ->execute()
         ;
-
     }
 }

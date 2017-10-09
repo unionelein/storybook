@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Story;
+use AppBundle\Entity\StoryPart;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -22,9 +23,18 @@ class StoryController extends Controller
         $story->setStory("I am kind ". rand(1,100));
         $story->setGenre("NICEVIY");
         $story->setTitle("About me in last month");
+        $story->setLikes(5);
+
+        $storyPart = new StoryPart();
+        $storyPart->setTitle("My second day of creating storybook");
+        $storyPart->setContent("LALALALALLALALALALAL");
+        $storyPart->setCreatedAt(new \DateTime("-1 month"));
+        $storyPart->setImgFileName("horoshkaStory3.jpg");
+        $storyPart->setStory($story);
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($story);
+        $em->persist($storyPart);
         $em->flush();
 
         return new Response("<html><body>Story was created!</body></html>");
@@ -38,7 +48,7 @@ class StoryController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $stories = $em->getRepository("AppBundle:Story")
-            ->findAllPublicStory();
+            ->findAllPublicStoryByLastStory();
 
         return $this->render("story/list.html.twig", [
             "stories" => $stories,
@@ -57,40 +67,33 @@ class StoryController extends Controller
         if (!$story) {
             throw $this->createNotFoundException("No story found");
         }
-        /*
-        $cache = $this->get("doctrine_cache.providers.my_markdown_cache");
-        $key = md5($title);
 
-        if ($cache->contains($key)) {
-            $title = $cache->fetch($key);
-        } else {
-            sleep(5);
-            $title = $this->get("markdown.parser")
-                ->transform($title);
-
-            $cache->save($key,$title);
-        }
-
-        $title = $this->get("markdown.parser")
-            ->transform($title);
-        */
+        $last3Months = $em->getRepository("AppBundle:StoryPart")
+            ->findAllStoryPartsInLast3Months($story);
 
         return $this->render("story/show.html.twig", [
             "story" => $story,
+            "countLast3Months" => count($last3Months),
         ]);
     }
 
     /**
-     * @Route("/story/{storyName}/stories", name="story_show_stories")
+     * @Route("/story/{title}/stories", name="story_show_stories")
      * @Method("GET")
      */
-    public function getStoriesAction()
+    public function getStoriesAction(Story $story)
     {
-        $stories = [
-            ["id" => 1, "storyName" => "Life of Khoroshka", "avatarUri" => "/images/horoshkaStory.jpg",  "story" => "My life be live",  "date" => "Aug. 18, 2017"],
-            ["id" => 2, "storyName" => "Philosophy",        "avatarUri" => "/images/horoshkaStory2.jpg", "story" => "some philosophy",  "date" => "Aug. 17, 2017"],
-            ["id" => 3, "storyName" => "Tachka",            "avatarUri" => "/images/horoshkaStory3.jpg", "story" => "NICOVO POKATALIS", "date" => "Aug. 14, 2017"],
-        ];
+        $stories = [];
+
+        foreach ($story->getStoryParts() as $storyPart) {
+            $stories[] = [
+                "id"        => $storyPart->getId(),
+                "storyName" => $storyPart->getTitle(),
+                "avatarUri" => "/images/".$storyPart->getImgFileName(),
+                "story"     => $storyPart->getContent(),
+                "date"      => $storyPart->getCreatedAt()->format('M d, Y'),
+            ];
+        }
 
         $data = [
             "stories" => $stories,

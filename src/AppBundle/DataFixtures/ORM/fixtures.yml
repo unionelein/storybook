@@ -5,3 +5,11 @@ AppBundle\Entity\Story:
         likes: <numberBetween(0, 1000)>
         story: <sentence()>
         isPublic: <boolean(30)>
+
+AppBundle\Entity\StoryPart:
+    story.part_{1..100}:
+        title: <name()>
+        imgFileName: '50%? horoshkaStory.jpg : horoshkaStory2.jpg'
+        content: <paragraph()>
+        createdAt: <dateTimeBetween('-6 months', 'now')>
+        story: '@story_*'
